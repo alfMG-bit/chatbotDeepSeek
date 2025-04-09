@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+    <h2>Sube tu documento</h2>
+    <form action="{{ url_for('analize_document') }}" method="post" enctype="multipart/form-data">
+        <label for="pdf_file">Selecciona tu archivo PDF:</label>
+        <input type="file" id="pdf_file" name="pdf_file" accept=".pdf">
+        <small id="pageCountWarning" style="color:red; display:none;">
+            El PDF no puede exceder 9 páginas
+        </small>
+        
+        <script>
+        document.getElementById('pdf_file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function() {
+                const typedarray = new Uint8Array(this.result);
+                
+                pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                    const warningElement = document.getElementById('pageCountWarning');
+                    if (pdf.numPages > 9) {
+                        warningElement.style.display = 'block';
+                        e.target.value = '';  
+                        warningElement.style.display = 'none';
+                    }
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+        </script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+        <button type="submit" class="btn">Analizar</button>
+    </form>
+
+    {% if result %}
+        <div class="analysis-results">
+            <h3>Resultados del análisis:</h3>
+            <div class="markdown-content">
+                {{ result|safe }}
+            </div>
+        </div>
+
+        {% if pdf_ready %}
+            <a href="{{ url_for('download_analysis', activity_id=activity_id) }}" class="btn btn-download">
+                Descargar pdf
+            </a>
+        {% endif %}
+    {% endif %}
+
+    <style>
+        .btn-download{
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn-download:hover{
+            background-color: #45a049;
+        }
+        .markdown-center{
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+    </style>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+    {% block content %}
+
+    <form action="{{ url_for('save_student_data') }}" method="POST">
+
+        <label for="age">Selecciona tu rango de edad</label>
+        <select name="age" id="age">
+            <option value="15-17">15-17 años</option>
+            <option value="18-20">18-20 años</option>
+            <option value="21-23">21-23 años</option>
+            <option value="24-26">24-26 años</option>
+            <option value="27-29">27-29 años</option>
+            <option value="30+">30 en adelante</option>
+        </select>
+    
+        <label for="education_area">Área de conocimiento en la que estudias</label>
+        <select name="education_area" id="education_area">
+            <option value="Biologicas_Salud">Ciencias Biológicas y de la Salud</option>
+            <option value="Ingeniería">Ciencias Básicas e Ingeniería</option>
+            <option value="Economico_Administrativas">Ciencias Económico-Administrarivas</option>
+            <option value="Agropecuarias">Agropecuarias</option>
+            <option value="Artes">Artes</option>
+            <option value="Bachillerato">Bachillerato/option>
+        </select>
+        
+        <label for="doc_type">Selecciona el tipo de documento </label>
+        <select name="doc_type" id="doc_type">
+            <option value="Ensayo">Ensayo</option>
+            <option value="Mapa conceptual">Mapa conceptual</option>
+            <option value="Mapa mental">Mapa mental</option>
+            <option value="Infografía">Infografía</option>
+            <option value="Resúmen"> Resúmen / Síntesis</option>
+            <option value="Ficha analítica">Ficha analítica</option>
+            <option value="Reporte de lectura">Reporte de lectura</option>
+        </select>
+
+        <button type="submit" class="btn btn_primary">Analizar documento</button>
+
+    </form>
+    
+
+    {% endblock %}

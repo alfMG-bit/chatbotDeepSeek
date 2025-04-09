@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+    {% block content %}
+        <body>
+            <h2>Sube tu rúbrica para tu actividad</h2>
+            <form method="post" action="{{ url_for('teacher_view') }}" enctype="multipart/form-data">
+                <label for="activity_id">Ingresa el nombre de la actividad:</label>
+                <input name="activity_id" id="activity_id" minlength="10" maxlength="30" placeholder="ID Actividad" required></input>
+                
+
+                <label for="evaluation_type">Seleccione su forma de evaluación</label>
+                <select name="evaluation_type" id="evaluation_type" required>
+                    <option value="">--Selecciona método--</option>
+                    <option value="pdf">Subir la rúbrica en PDF</option>
+                    <option value="text">Escribir mi rúbrica</option>
+                </select>
+                    
+                <div id="pdf_form" style="display: none;">
+                    <input type="file" id="rubric_file" name="rubric_file" accept=".pdf">
+                </div>
+                <div id="my_promt" style="display: none;">
+                    <textarea  name="rubric_text" minlength="50" maxlength="1000" placeholder="Escribe tu rúbrica"></textarea>
+                </div>
+
+                <button type="submit" class="btn">Crear actividad</button>
+            </form>
+            <script>
+                document.getElementById('evaluation_type').addEventListener('change', function(){
+                    const selection = this.value;
+                    const uploadForm = document.getElementById('pdf_form');
+                    const promtpForm = document.getElementById('my_promt');
+
+                    uploadForm.style.display = 'none';
+                    promtpForm.style.display = 'none';
+
+                    if(this.value == 'pdf'){
+                        uploadForm.style.display = 'block';
+                    }else if(this.value == 'text'){
+                        promtpForm.style.display = 'block';                    }
+                });
+            </script>
+        </body>
+
+    {% endblock %}
